@@ -38,6 +38,10 @@ export class AuthService {
       throw new AppError("Invalid email or password", httpStatus.UNAUTHORIZED);
     }
 
+    if (!user.isActive) {
+      throw new AppError("User is not active", httpStatus.FORBIDDEN);
+    }
+
     const isMatch = await bcrypt.compare(credentials.password, user.password!);
 
     if (!isMatch) {
@@ -47,6 +51,7 @@ export class AuthService {
     const token = generateToken({
       id: user._id,
       email: user.email,
+      role: user.role,
     });
 
     return {
@@ -54,6 +59,7 @@ export class AuthService {
         id: user._id,
         name: user.name,
         email: user.email,
+        role: user.role,
       },
       token,
     };

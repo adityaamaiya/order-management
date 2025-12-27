@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import httpStatus from "http-status";
 import { verifyToken } from "../utils/jwt";
 
-
 export const isAuth = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
 
@@ -21,6 +20,7 @@ export const isAuth = (req: Request, res: Response, next: NextFunction) => {
     next();
   } catch (error) {
     return res.status(httpStatus.UNAUTHORIZED).json({
+      success: false,
       message: "Invalid or expired token",
     });
   }

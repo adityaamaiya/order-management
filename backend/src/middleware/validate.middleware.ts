@@ -22,8 +22,14 @@ export const validate =
       });
     }
 
-    // "cleaned" data from Zod (which removes extra fields)
+    // Apply cleaned/transformed data from Zod
     req.body = result.data.body;
+    if (result.data.query) {
+      req.query = result.data.query as typeof req.query;
+    }
+    if (result.data.params) {
+      req.params = result.data.params as typeof req.params;
+    }
 
     next();
   };
